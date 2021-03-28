@@ -1,4 +1,4 @@
-# VMware vRealize Orchestrator Exentsion for VSCode
+# VMware vRealize Orchestrator Extension for VSCode
 
 - Edit existing vRO Workflow Scriptable Tasks and Action code direcly by hooking straight into your linked git repo
 - Create new vRO Action using a guided wizard

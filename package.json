@@ -3,7 +3,7 @@
 	"displayName": "vRO XML Explorer",
 	"description": "VSCode extension for vRealize Orchestrator Workflows and Actions",
 	"version": "0.0.1",
-	"publisher": "Chris Alleaume",
+	"publisher": "ChrisAlleaume",
 	"enableProposedApi": true,
 	"engines": {
 		"vscode": "^1.52.0"
