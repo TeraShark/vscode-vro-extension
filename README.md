@@ -1,51 +1,28 @@
-# Views & View Containers
+# VMware vRealize Orchestrator Exentsion for VSCode
 
-This sample demonstrates how to implement and contribute a tree view in VS Code. This includes:
+- Edit existing vRO Workflow Scriptable Tasks and Action code direcly by hooking straight into your linked git repo
+- Create new vRO Action using a guided wizard
+- Support for the following vRO runtimes
+    - Javascript
+    - NodeJS
+    - Powershell
+    - Python
+- Supports artifacts from vRO >= 8.0
 
-- Contributing views and view containers.
-- Contributing actions in various location of the view.
-- Implementing the tree data provider for the view.
-- Creating and working with the view.
+## Edit, lint and correct existing code
 
-This sample provides following views
+1. Download your vRO Repo locally
+2. Open the folder using VSCode
+3. Find your Workflow or Action XML file
+4. Browse existing scripts in the vRO Code Explorer
+5. Export, Preview or Inject your
 
-- Node dependencies view
-- Ftp file explorer view
+## Create new Actions
 
-Following example shows Node dependencies view in Package Explorer View container.
 
-![Package Explorer](./resources/package-explorer.png)
 
-## VS Code API
+## Coming soon
 
-This sample uses following contribution points, activation events and APIs
-
-### Contribution Points
-
-- `views`
-- `viewsContainers`
-- `menu`
-  - `view/title`
-  - `view/item/context`
-
-### Activation Events
-
-- `onView:${viewId}`
-
-### APIs
-
-- `window.createTreeView`
-- `window.registerTreeDataProvider`
-- `TreeView`
-- `TreeDataProvider`
-
-Refer to [Usage](./USAGE.md) document for more details.
-
-## Running the Sample
-
-- Open this example in VS Code Insiders
-- `npm install`
-- `npm run watch`
-- `F5` to start debugging
-- Node dependencies view is shown in Package explorer view container in Activity bar.
-- FTP file explorer view should be shown in Explorer
+- Create new Scripts in a Workflow
+- Connection tools for vRO
+    - Command vRO to pull the latest source
