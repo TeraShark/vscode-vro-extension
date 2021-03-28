@@ -1,125 +1,28 @@
-# Contributing a View Container & View
+# VMware vRealize Orchestrator Exentsion for VSCode
 
-- Contribute a view container using the [viewsContainers](https://code.visualstudio.com/api/references/contribution-points#contributes.viewsContainers) extension point.
-- Contribute a view using the [views](https://code.visualstudio.com/api/references/contribution-points#contributes.views) extension point.
-- Register a data provider for the view using the [TreeDataProvider](https://code.visualstudio.com/api/references/vscode-api#_TreeDataProvider) API.
-- Contribute actions to the view using `view/title` and `view/item/context` locations in [menus](https://code.visualstudio.com/api/references/contribution-points#contributesmenus) extension point.
+- Edit existing vRO Workflow Scriptable Tasks and Action code direcly by hooking straight into your linked git repo
+- Create new vRO Action using a guided wizard
+- Support for the following vRO runtimes
+    - Javascript
+    - NodeJS
+    - Powershell
+    - Python
+- Supports artifacts from vRO >= 8.0
 
-## contributes.viewsContainers extension point
+## Edit, lint and correct existing code
 
-As of Visual Studio Code v1.23.0, you can move custom views into your own view container which will show up in the activity bar.
+1. Download your vRO Repo locally
+2. Open the folder using VSCode
+3. Find your Workflow or Action XML file
+4. Browse existing scripts in the vRO Code Explorer
+5. Export, Preview or Inject your
 
-To do such, extension writers can add a `viewsContainers` object in the contributes section. each object will require three things:
+## Create new Actions
 
-- `id`: The name of the new view you're creating
-- `title`: The name which will show up at the top of the view
-- `icon`: an image which will be displayed for the view container in the activity bar
 
-## contributes.views extension point
 
-You must specify an identifier and name for the view. You can contribute to following locations
+## Coming soon
 
-- `explorer`: Explorer view in the Side bar
-- `debug`: Debug view in the Side bar
-- `scm`: Source Control Management view in the Side bar
-
-When the user opens the view, VS Code will then emit an activationEvent `onView:${viewId}` (e.g. `onView:nodeDependencies` for the example below). You can also control the visibility of the view by providing the `when` context value.
-
-Following, in the views object, you can then add a field with the same string as the `id` in the `viewsContainers`.
-
-```json
-"contributes": {
-    "viewsContainers": {
-        "activitybar": [
-            {
-                "id": "package-explorer",
-                "title": "Package Explorer",
-                "icon": "media/dep.svg"
-            }
-        ]
-    },
-    "views": {
-        "tree-view": [
-            {
-                "id": "nodeDependencies",
-                "name": "Node Dependencies",
-                "when": "workspaceHasPackageJSON"
-            }
-        ]
-    }
-}
-```
-
-## View actions
-
-You can contribute actions at following locations in the view
-
-- `view/title`: Location to show actions in the view title. Primary or inline actions use `"group": "navigation"` and rest are secondary actions which are in `...` menu.
-- `view/item/context`: Location to show actions for the tree item. Inline actions use `"group": "inline"` and rest are secondary actions which are in `...` menu.
-
-You can control the visibility of these actions using the `when` property.
-
-Examples:
-
-```json
-"contributes": {
-    "commands": [
-        {
-            "command": "nodeDependencies.refreshEntry",
-            "title": "Refresh",
-            "icon": {
-                "light": "resources/light/refresh.svg",
-                "dark": "resources/dark/refresh.svg"
-            }
-        }
-    ],
-    "menus": {
-        "view/title": [
-            {
-                "command": "nodeDependencies.refreshEntry",
-                "when": "view == nodeDependencies",
-                "group": "navigation"
-            }
-        ]
-    }
-}
-```
-
-**Note:** If you want to show an action for specific items, you can do it by defining context of a tree item using `TreeItem.contextValue` and you can specify the context value for key `viewItem` in `when` expression.
-
-Examples:
-
-```json
-"contributes": {
-    "menus": {
-       "view/item/context": [
-           {
-                "command": "nodeDependencies.deleteEntry",
-                "when": "view == nodeDependencies && viewItem == dependency"
-            }
-        ]
-    }
-}
-```
-
-## TreeDataProvider
-
-Extension writers should register a [provider](https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider) programmatically to populate data in the view.
-
-```typescript
-vscode.window.registerTreeDataProvider('nodeDependencies', new DepNodeProvider());
-```
-
-See [nodeDependencies.ts](src/nodeDependencies.ts) for the implementation.
-
-## TreeView
-
-If you would like to perform some UI operations on the view programatically, you can use `window.createTreeView` instead of `window.registerDataProvider`. This will give access to the view which you can use for performing view operations.
-
-```typescript
-vscode.window.createTreeView('ftpExplorer', {
-	treeDataProvider: new FtpTreeDataProvider(),
-});
-```
-
-See [ftpExplorer.ts](src/ftpExplorer.ts) for the implementation.
+- Create new Scripts in a Workflow
+- Connection tools for vRO
+    - Command vRO to pull the latest source
