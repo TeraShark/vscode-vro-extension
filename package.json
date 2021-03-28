@@ -1,0 +1,199 @@
+{
+	"name": "vro-xml-explorer",
+	"displayName": "vRO XML Explorer",
+	"description": "VSCode extension for vRealize Orchestrator Workflows and Actions",
+	"version": "0.0.1",
+	"publisher": "Chris Alleaume",
+	"enableProposedApi": true,
+	"engines": {
+		"vscode": "^1.52.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onView:vROxmlOutline",
+		"onLanguage:xml"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"id": "vROxmlOutline",
+					"name": "vRO Code Outline",
+					"when": "xmlOutlineEnabled"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "vro.createAction",
+				"title": "New vRO Action"
+			},
+			{
+				"command": "vROxmlOutline.export",
+				"title": "Export All Scripts",
+				"icon": {
+					"light": "resources/light/signout.svg",
+					"dark": "resources/dark/signout.svg"
+				}
+			},
+			{
+				"command": "vROxmlOutline.exportScript",
+				"title": "Export Script",
+				"icon": {
+					"light": "resources/light/signout.svg",
+					"dark": "resources/dark/signout.svg"
+				}
+			},
+			{
+				"command": "vROxmlOutline.reinjectScript",
+				"title": "ReInject Script",
+				"icon": {
+					"light": "resources/light/signin.svg",
+					"dark": "resources/dark/signin.svg"
+				}
+			},
+			{
+				"command": "vROxmlOutline.reinjectAll",
+				"title": "ReInject All Scripts",
+				"icon": {
+					"light": "resources/light/signin.svg",
+					"dark": "resources/dark/signin.svg"
+				}
+			},
+			{
+				"command": "vROxmlOutline.exportAll",
+				"title": "Export All Scripts",
+				"icon": {
+					"light": "resources/light/signout.svg",
+					"dark": "resources/dark/signout.svg"
+				}
+			},
+			{
+				"command": "vROxmlOutline.previewScript",
+				"title": "Preview Script",
+				"icon": {
+					"light": "resources/light/eye.svg",
+					"dark": "resources/dark/eye.svg"
+				}
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "vro.createAction",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "vROxmlOutline.exportScript",
+					"when": "view == vROxmlOutline && viewItem == script",
+					"group": "navigation"
+				},
+				{
+					"command": "vROxmlOutline.exportScript",
+					"when": "view == vROxmlOutline && viewItem == script",
+					"group": "inline@2"
+				},
+				{
+					"command": "vROxmlOutline.reinjectScript",
+					"when": "view == vROxmlOutline && viewItem == script",
+					"group": "navigation"
+				},
+				{
+					"command": "vROxmlOutline.reinjectScript",
+					"when": "view == vROxmlOutline && viewItem == script",
+					"group": "inline@3"
+				},
+				{
+					"command": "vROxmlOutline.reinjectAll",
+					"when": "view == vROxmlOutline && viewItem == Workflow",
+					"group": "inline@2"
+				},
+				{
+					"command": "vROxmlOutline.reinjectAll",
+					"when": "view == vROxmlOutline && viewItem == Workflow",
+					"group": "navigation"
+				},
+				{
+					"command": "vROxmlOutline.exportAll",
+					"when": "view == vROxmlOutline && viewItem == Workflow",
+					"group": "inline@2"
+				},
+				{
+					"command": "vROxmlOutline.exportAll",
+					"when": "view == vROxmlOutline && viewItem == Workflow",
+					"group": "navigation"
+				},
+				{
+					"command": "vROxmlOutline.reinjectAll",
+					"when": "view == vROxmlOutline && viewItem == Action",
+					"group": "inline@2"
+				},
+				{
+					"command": "vROxmlOutline.reinjectAll",
+					"when": "view == vROxmlOutline && viewItem == Action",
+					"group": "navigation"
+				},
+				{
+					"command": "vROxmlOutline.exportAll",
+					"when": "view == vROxmlOutline && viewItem == Action",
+					"group": "inline@1"
+				},
+				{
+					"command": "vROxmlOutline.exportAll",
+					"when": "view == vROxmlOutline && viewItem == Action",
+					"group": "navigation"
+				},
+				{
+					"command": "vROxmlOutline.previewScript",
+					"when": "view == vROxmlOutline && viewItem == script",
+					"group": "inline@1"
+				},
+				{
+					"command": "vROxmlOutline.previewScript",
+					"when": "view == vROxmlOutline && viewItem == script",
+					"group": "navigation"
+				}
+			]
+		},
+		"configuration": [
+			{
+				"title": "vRO Code Outline",
+				"properties": {
+					"vROxmlOutline.autorefresh": {
+						"type": "boolean",
+						"default": false
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint . --ext .ts,.tsx"
+	},
+	"devDependencies": {
+		"@types/mkdirp": "^0.5.2",
+		"@types/node": "^12.20.6",
+		"@types/rimraf": "^2.0.2",
+		"@types/vscode": "^1.45.0",
+		"@typescript-eslint/eslint-plugin": "^4.16.0",
+		"@typescript-eslint/parser": "^4.16.0",
+		"eslint": "^7.21.0",
+		"typescript": "^4.2.2"
+	},
+	"dependencies": {
+		"minimist": "^0.2.1",
+		"mkdirp": "^0.5.1",
+		"rimraf": "^2.6.2",
+		"uuid": "^8.3.2",
+		"xml2js": "^0.4.23"
+	}
+}
