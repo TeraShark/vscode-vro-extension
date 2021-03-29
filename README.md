@@ -21,10 +21,10 @@
     - This will generate a specifically-named code file in the same folder as your workflow, and will open it in the editor
 8. Make your edits and corrections as you would any other code file
 9. ReInject your edited script
-  - You can export / reinject / preview individual scripts from Workflows: 
-![](/screenshots/script-item-view.png?raw=true "Export Individual Scripts from Workflows (or Actions)")
+  - You can export / reinject / preview individual scripts from Workflows:
+  ![](/screenshots/script-item-view.png?raw=true "Export Individual Scripts from Workflows (or Actions)")
   - You can export / reinject all scripts in a Workflow:
-![](/screenshots/base-item-view.png?raw=true "Export All Scripts from Workflows (or Actions)")
+  ![](/screenshots/base-item-view.png?raw=true "Export All Scripts from Workflows (or Actions)")
 
 ## Create new vRO Actions
 
