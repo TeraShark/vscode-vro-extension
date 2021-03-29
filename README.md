@@ -16,11 +16,11 @@
 3. Find your Workflow or Action XML file and click on it 
 4. Browse the Scripts in your Workflow / Action in the vRO Code Explorer
 ![](/screenshots/code-outline-view.png?raw=true "Use the Extension's vRO Code Outline View to see the scripted elements in your vRO Workflows and Actions")
-5. Optional: Preview the script you want to edit by right-clicking the script
-6. Export the script you want to edit by right-clicking the script in the Outline View
+6. Optional: Preview the script you want to edit by right-clicking the script
+7. Export the script you want to edit by right-clicking the script in the Outline View
     - This will generate a specifically-named code file in the same folder as your workflow, and will open it in the editor
-7. Make your edits and corrections as you would any other code file
-8. ReInject your edited script
+8. Make your edits and corrections as you would any other code file
+9. ReInject your edited script
     - You can export / reinject / preview individual scripts from Workflows: 
 ![](/screenshots/script-item-view.png?raw=true "Export Individual Scripts from Workflows (or Actions)")
     -  You can export / reinject all scripts in a Workflow:
