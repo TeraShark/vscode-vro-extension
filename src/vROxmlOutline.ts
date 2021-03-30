@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import * as xml from 'xml2js';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as rest from 'superagent';
+import * as yaml from 'js-yaml';
 import { v4 as uuidv4 } from 'uuid';
 
 interface RenderKey {
@@ -37,6 +39,12 @@ interface vROArtifact {
 	name: string;
 	type: string;
 	items: Array<WfElement>;
+}
+
+interface vROConfig {
+	fqdn: string;
+	username: string;
+	password: string;
 }
 
 export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey> {
@@ -136,6 +144,41 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		}
 		//create the Action:
 		this.createActionXML(offset.path, name, inputs, returnType, _runtime);
+	}
+
+	private vROPull(): void{
+		const config = this.readConfig();
+		if(config){
+			let baseUrl = `https://${config.fqdn}`;
+			if(!baseUrl.endsWith("/"))
+				baseUrl += "/";
+			//token:
+			const creds = {username: config.username, password: config.password};
+			let subUrl = "csp/gateway/am/api/login?access_token=";
+			rest.get(baseUrl + subUrl)
+				.query( creds )
+				.end((err, res) => {
+					if (err) { return console.log(err); }
+					console.log(res.body.url);
+					console.log(res.body.explanation);
+				});
+			//initiate pull request:
+			subUrl = "vco/api/content-repositories/requests/pull";
+			//attach Bearer Token
+			//post with empty body
+		}
+	}
+
+	private readConfig(): vROConfig{
+		try{
+		const doc = yaml.load(fs.readFileSync('/vro_config.yml', 'utf8'));
+		console.log(doc);
+		const config: vROConfig = { fqdn: doc.server.fqdn, username: doc.server.username, password: doc.server.password };
+		return config;
+		} catch(e){
+			//display warning
+			return null;
+		}
 	}
 
 	private createActionXML(folderPath: string, name: string, inputs: Map<string, string>, output: string, language: vROruntimes): void {
