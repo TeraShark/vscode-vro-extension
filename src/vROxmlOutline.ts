@@ -80,6 +80,11 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		}
 	}
 
+	pullLatestRepo(key?: RenderKey):void {
+		// do stuff
+		this.vROPull();
+	}
+
 	export(key?: RenderKey): void {
 		//export all 
 		this.exportArtifactScripts();
