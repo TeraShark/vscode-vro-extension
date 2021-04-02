@@ -96,6 +96,11 @@
 					"when": "explorerResourceIsFolder",
 					"command": "vro.createAction",
 					"group": "navigation"
+				},
+				{
+					"when": "resourceFilename == vro_config.yaml",
+					"command": "vro.sendPullCommand",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [

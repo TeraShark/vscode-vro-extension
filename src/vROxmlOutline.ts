@@ -80,9 +80,9 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		}
 	}
 
-	pullLatestRepo(key?: RenderKey):void {
+	pullLatestRepo(uri?: vscode.Uri):void {
 		// do stuff
-		this.vROPull();
+		this.vROPull(uri);
 	}
 
 	export(key?: RenderKey): void {
@@ -151,8 +151,8 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		this.createActionXML(offset.path, name, inputs, returnType, _runtime);
 	}
 
-	private vROPull(): void{
-		const config = this.readConfig();
+	private vROPull(uri:vscode.Uri): void{
+		const config = this.readConfig(uri.fsPath);
 		if(config){
 			let baseUrl = `https://${config.fqdn}`;
 			if(!baseUrl.endsWith("/"))
@@ -160,23 +160,36 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 			//token:
 			const creds = {username: config.username, password: config.password};
 			let subUrl = "csp/gateway/am/api/login?access_token=";
-			rest.get(baseUrl + subUrl)
-				.query( creds )
+			process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+			rest.post(baseUrl + subUrl)
+				.send( creds )
 				.end((err, res) => {
-					if (err) { return console.log(err); }
-					console.log(res.body.url);
-					console.log(res.body.explanation);
+					if (err) { 
+						vscode.window.showErrorMessage(err); 
+						return;
+					} 
+					//auth token:
+					const auth_token = res.body.access_token;
+					subUrl = "vco/api/content-repositories/requests/pull";
+					rest.post(baseUrl + subUrl)
+					.send( {} ) //empty body
+					.set("Authorization", `Bearer ${auth_token}`)
+					.end((_err, _res) => {
+						if (_err) { 
+							vscode.window.showErrorMessage(_err); 
+							return;
+						} 
+						console.log(_res.body.url);
+						console.log(_res.body.explanation);
+						vscode.window.showInformationMessage("Command sent to vRO. Check vRO for status and/or any additional information.");
+					});
 				});
-			//initiate pull request:
-			subUrl = "vco/api/content-repositories/requests/pull";
-			//attach Bearer Token
-			//post with empty body
 		}
 	}
 
-	private readConfig(): vROConfig{
+	private readConfig(filePath:string): vROConfig{
 		try{
-		const doc = yaml.load(fs.readFileSync('/vro_config.yml', 'utf8'));
+		const doc = yaml.load(fs.readFileSync(filePath, 'utf8'));
 		console.log(doc);
 		const config: vROConfig = { fqdn: doc.server.fqdn, username: doc.server.username, password: doc.server.password };
 		return config;
