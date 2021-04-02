@@ -44,9 +44,30 @@
     - node (NodeJS)
 - Once completed, the extension will create a new vRO XML file and will generate and open a new code window matching the language you specified. When you're done writing your code, you will have the ability to reinject your code back into the Action XML. Easy as pie.
 
-## Coming soon
+## Instruct vRO to perform a "pull"
+
+- Once you've pulled your vRO repo locally, create a file somewhere in the folder structure, specifically named `vro_config.yaml` with the following contents:
+  ``` yaml
+  ---
+  server:
+    fqdn: vro_server_1.domain.com
+    username: some_admin_user
+    password: ThisIsAWeakPassword!
+  ```
+- Now, once saved, you will be able to right-click the yaml file and you'll see this:
+![](/screenshots/vro_pull.png?raw=true "New Action Menu")
+- Sending this command to vRO (for now) is a fire-and-forget option. Monitoring the status of pull requests will come later.
+
+## * Coming soon *
 
 - Create new Scripts in an existing Workflow
-- Connection tools for vRO
-    - Command vRO to pull the latest source
 - Backlog
+  - Connection tools for vRO
+      - ~~Command vRO to pull the latest source~~ 
+      - vRO Workflow and Action Browser
+        - Direct download / upload for Workflows and Actions
+      - Direct Execute / Test
+        - Uploads artifact (Workflow / Action)
+        - Executes artifact
+        - Monitors execution
+        - Outputs results
