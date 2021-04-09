@@ -11,16 +11,16 @@
 
 ## Edit, lint and correct code in your existing Actions and Workflows
 
-1. Download your vRO Repo locally
-2. Open the folder using VSCode
-3. Find your Workflow or Action XML file and click on it 
-4. Browse the Scripts in your Workflow / Action in the vRO Code Explorer\
+1. Download your vRO Repo locally (git pull / clone)
+2. Open the root folder for the Repo using VSCode
+3. Browse for a Workflow or Action XML file and click on it 
+4. Now, you can browse the Scripts in your Workflow / Action in the vRO Code Explorer\
 ![](/screenshots/code-outline-view.png?raw=true "Use the Extension's vRO Code Outline View to see the scripted elements in your vRO Workflows and Actions")
-6. Optional: Preview the script you want to edit by right-clicking the script
-7. Export the script you want to edit by right-clicking the script in the Outline View
+6. Optional: Preview the script you want to edit by right-clicking the script and selecting "Preview"
+7. Export the script you want to edit by right-clicking the script in the Outline View and clicking "Export"
     - This will generate a specifically-named code file in the same folder as your workflow, and will open it in the editor
 8. Make your edits and corrections as you would any other code file
-9. ReInject your edited script
+9. ReInject your edited script by right-clicking the relevant item in the vRO Code Explorer\
   - You can export / reinject / preview individual scripts from Workflows\
   ![](/screenshots/script-item-view.png?raw=true "Export Individual Scripts from Workflows (or Actions)")
   - You can export / reinject all scripts in a Workflow:\
