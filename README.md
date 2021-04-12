@@ -62,12 +62,13 @@
 
 - Create new Scripts in an existing Workflow
 - Backlog
+  - Configurable version increments
   - Connection tools for vRO
       - ~~Command vRO to pull the latest source~~ 
-      - vRO Workflow and Action Browser
-        - Direct download / upload for Workflows and Actions
+      - Direct vRO Browser (Actions and Workflows)
+        - Direct download / upload (edit) for code in Workflows and Actions
       - Direct Execute / Test
-        - Uploads artifact (Workflow / Action)
-        - Executes artifact
-        - Monitors execution
-        - Outputs results
+        - Upload artifact (Workflow / Action)
+        - Execute artifact
+        - Monitor execution
+        - Output results
