@@ -35,7 +35,11 @@
 		"commands": [
 			{
 				"command": "vro.createAction",
-				"title": "New vRO Action"
+				"title": "New vRO Native Action"
+			},
+			{
+				"command": "vro.createActionBundle",
+				"title": "New vRO Action Bundle"
 			},
 			{
 				"command": "vro.sendPullCommand",
@@ -93,8 +97,13 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "explorerResourceIsFolder",
+					"when": "explorerResourceIsFolder && resourcePath =~ /\/Actions/",
 					"command": "vro.createAction",
+					"group": "navigation"
+				},
+				{
+					"when": "explorerResourceIsFolder && resourcePath =~ /\/ActionBundles/",
+					"command": "vro.createActionBundle",
 					"group": "navigation"
 				},
 				{

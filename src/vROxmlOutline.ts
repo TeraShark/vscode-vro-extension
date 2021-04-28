@@ -30,8 +30,6 @@ interface WfElement {
 	outputs: Map<string, string>;
 	length: number;
 	language: string;
-	//getSalary: (number) => number; // arrow function
-	//getManagerName(number): string;
 }
 
 interface vROArtifact {
@@ -91,8 +89,9 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 	}
 
 	async createAction(offset: any) {
+		
 		if (!offset || !offset.path || !offset.path.includes("Actions")) {
-			vscode.window.showWarningMessage(`Creating a vRO Action is only supported if doing so in a descendant of the "Actions" folder.`);
+			vscode.window.showWarningMessage(`Creating a vRO Native Action is only supported if doing so in a descendant of the "Actions" folder.`);
 			return;
 		}
 		const opt: vscode.InputBoxOptions = { ignoreFocusOut: true, prompt: "Provide a Name for your Action", validateInput: this.validateLength };
@@ -101,6 +100,27 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		const name = await vscode.window.showInputBox(opt);
 		if (!name)
 			return;
+
+		//get the namespace
+		opt.prompt = "What is the namespace for your Action? eg 'com.vmware.pso'";
+		let index = offset.path.indexOf("/Actions");
+
+		opt.value = "";
+		if(index >= 0){
+			if (offset.path.endsWith("Actions"))
+				index += 8;
+			else 
+				index += 9;
+			opt.value = offset.path.substring(index).split('/').join('.');
+		}
+		
+		opt.validateInput = this.validateDotNotation;
+
+		const namespace = await vscode.window.showInputBox(opt);
+		if (!namespace)
+			return;
+		
+		
 		//now get the number of inputs expected:
 		opt.prompt = "How many inputs will your Action expect?";
 		opt.value = "0";
@@ -148,7 +168,89 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		catch {//
 		}
 		//create the Action:
-		this.createActionXML(offset.path, name, inputs, returnType, _runtime);
+		this.createActionXML(offset.path, namespace, name, inputs, returnType, _runtime);
+	}
+
+	async createActionBundle(offset: any) {
+		
+		if (!offset || !offset.path || !offset.path.includes("ActionBundles")) {
+			vscode.window.showWarningMessage(`Creating a vRO Action Bundle is only supported if doing so in a descendant of the "ActionBundles" folder.`);
+			return;
+		}
+		const opt: vscode.InputBoxOptions = { ignoreFocusOut: true, prompt: "Provide a Name for your Action", validateInput: this.validateLength };
+
+		//get the name of the Action
+		const name = await vscode.window.showInputBox(opt);
+		if (!name)
+			return;
+
+		//get the namespace
+		opt.prompt = "What is the namespace for your Action? eg 'com.vmware.pso'";
+		opt.validateInput = this.validateDotNotation;
+		opt.value = "com.vmware";
+		
+		const namespace = await vscode.window.showInputBox(opt);
+		if (!namespace)
+			return;
+		
+		//Entry point
+		opt.prompt = "What is the Entry Point for your Action? (default is 'handler.handler')";
+	
+		opt.validateInput = this.validateDotNotation;
+		opt.value = "handler.handler";
+		
+		const entrypoint = await vscode.window.showInputBox(opt);
+		if (!entrypoint)
+			return;
+
+		//now get the number of inputs expected:
+		opt.prompt = "How many inputs will your Action expect?";
+		opt.value = "0";
+		opt.validateInput = (value) => {
+			return (isNaN(+value) ? "Please enter a valid number" : "");
+		};
+
+		const inputs = new Map<string, string>();
+		const inputstr = await vscode.window.showInputBox(opt);
+		if (!inputstr)
+			return;
+		const totalInputs = Number(inputstr);
+
+		for (let i = 0; i < totalInputs; i++) {
+			opt.prompt = `What will you call the ${i == 0 ? "1st" : i == 1 ? "2nd" : i == 2 ? "3rd" : String(i + 1) + "th"} input (name)?`;
+			opt.value = "input_" + i;
+			opt.validateInput = this.validateLength;
+			const inputName = await vscode.window.showInputBox(opt);
+			if (!inputName)
+				return;
+			opt.prompt = `What type will [${inputName}] be?`;
+			opt.value = "string";
+			const inputType = await vscode.window.showInputBox(opt);
+			if (!inputType)
+				return;
+			inputs.set(inputName, inputType);
+		}
+		opt.prompt = "What type will your Action return? (use void for no return).";
+		opt.value = "void";
+		opt.validateInput = this.validateLength;
+		const returnType = await vscode.window.showInputBox(opt);
+		if (!returnType)
+			return;
+		opt.prompt = "What language will your Action be scripted in?  Valid values are:  node (NodeJS), ps (Powershell), python (Python)";
+		opt.value = "node";
+		opt.validateInput = this.validateLength;
+		const _lang = await vscode.window.showInputBox(opt);
+
+		if (!_lang)
+			return;
+		let _runtime;
+		try {
+			_runtime = vROruntimes[_lang];
+		}
+		catch {//
+		}
+		//create the Action:
+		this.createActionBundleFiles(offset.path, namespace, entrypoint, name, inputs, returnType, _runtime);
 	}
 
 	private vROPull(uri:vscode.Uri): void{
@@ -199,9 +301,115 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		}
 	}
 
-	private createActionXML(folderPath: string, name: string, inputs: Map<string, string>, output: string, language: vROruntimes): void {
+	private createActionBundleFiles(folderPath: string, namespace: string, entrypoint: string, name: string, inputs: Map<string, string>, output: string, language: vROruntimes): void {
+		//Create initial folder if non-existent
+		let basePath = folderPath.substring(0, folderPath.indexOf("/ActionBundles"));
+		basePath += "/ActionBundles/";
+		const bundlePath = basePath + namespace;
+		const bundleFilePath = bundlePath + "/" + name;
 
-		const fileName = path.join(folderPath, name + ".xml");
+
+		if(!fs.existsSync(bundleFilePath))
+			fs.mkdirSync(bundleFilePath, {recursive: true});
+		else {
+			vscode.window.showErrorMessage("Error - Action '" + name + "' in namespace '" + namespace + "' already exists!");
+			return;
+		}
+		
+	
+		//XML file:
+		
+		let actionBasePath = folderPath.substring(0, folderPath.indexOf("/ActionBundles"));
+		actionBasePath += "/Actions/";
+		actionBasePath += namespace.split(".").join("/");
+
+		const fileName = path.join(actionBasePath, name + ".xml");
+		
+		const action = {
+			"dunes-script-module": {
+				"$": {
+					"name": name,
+					"result-type": output,
+					"api-version": "6.0.0",
+					"id": uuidv4(),
+					"version": "0.0.1",
+					"category-name": namespace
+				}
+			}
+		};
+
+		let _script = "//start writing your code!";
+		let comment = "// ";
+		const entryFunction = entrypoint.split(".")[1];
+		action["dunes-script-module"]["entry-point"] = entrypoint;
+		if(inputs.size > 0){
+			let _inputs = [];
+			inputs.forEach((value: string, key: string) => {
+				_inputs.push({
+					"_": "",
+					"$": { "n": key, "t": value }
+				});
+			});
+			action["dunes-script-module"]["param"] = _inputs;
+		}
+		
+
+		let ext = "js";
+		switch (language) {
+			default:
+				ext = "js";
+				comment = "// ";
+				break;
+			case vROruntimes.node:
+				action["dunes-script-module"]["runtime"] = [vROruntimes.node];
+				_script = `exports.${entryFunction} = (context, inputs, callback) => {\n\tconsole.log("Inputs were " + JSON.stringify(inputs));\n\tcallback("foo", {status: "bar"});\n};`;
+				break;
+			case vROruntimes.ps:
+				action["dunes-script-module"]["runtime"] = [vROruntimes.ps];
+				_script = `function ${entryFunction}($context, $inputs) {\n\t$inputsString = $inputs | ConvertTo-Json -Compress\n\tWrite-Host "Inputs were $inputsString"\n\t$output=@{status = 'done'}\n\treturn $output\n}`;
+				ext = "ps1";
+				comment = "# ";
+				break;
+			case vROruntimes.python:
+				action["dunes-script-module"]["runtime"] = [vROruntimes.python];
+				_script = `import json\r\n\r\ndef ${entryFunction}(context, inputs):\r\n    jsonOut=json.dumps(inputs, separators=(',', ':'))\r\n    print(\"Inputs were {0}\".format(jsonOut))\r\n\r\n    outputs = {\r\n      \"status\": \"done\"\r\n    }\r\n\r\n    return outputs`;
+				ext = "py";
+				comment = "# ";
+				break;
+		}
+
+		action["dunes-script-module"]["script"] = [{
+			"_": `${comment}This is an Action Bundle which will ignore any scripts located in this XML file`,
+			"$": { "encoded": "false" }
+		}];
+
+		const builder = new xml.Builder({ cdata: true });
+		console.debug("Rebuilding XML...");
+		const _xml = builder.buildObject(action);
+
+		//Base bundle file:
+		const entryFile = `${entrypoint.split(".")[0]}.${ext}`;
+		console.debug(`Writing entry file: ${entryFile}`)
+
+		fs.writeFileSync(bundleFilePath + "/" + entryFile, _script);
+		
+		if(!fs.existsSync(actionBasePath))
+			fs.mkdirSync(actionBasePath, {recursive: true});
+		console.debug(`Writing associated Action File: ${fileName}`);
+		fs.writeFileSync(fileName, _xml);
+		vscode.window.showInformationMessage("Action Created Successfully.");
+		this.showFile(bundleFilePath + "/" + entryFile);
+		console.debug("Done!");
+	}
+
+	private createActionXML(folderPath: string, namespace: string, name: string, inputs: Map<string, string>, output: string, language: vROruntimes): void {
+
+		let actionBasePath = folderPath.substring(0, folderPath.indexOf("/Actions"));
+		actionBasePath += "/Actions/";
+		actionBasePath += namespace.split(".").join("/");
+
+		const fileName = path.join(actionBasePath, name + ".xml");
+
 		let category = "";
 		const parts = folderPath.split(path.sep);
 		let isBase = false;
@@ -224,6 +432,17 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 				}
 			}
 		};
+
+		if(inputs.size > 0){
+			let _inputs = [];
+			inputs.forEach((value: string, key: string) => {
+				_inputs.push({
+					"_": "",
+					"$": { "n": key, "t": value }
+				});
+			});
+			action["dunes-script-module"]["param"] = _inputs;
+		}
 
 		let _script = "//start writing your code!";
 		let ext = "js";
@@ -252,7 +471,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		}];
 
 		const builder = new xml.Builder({ cdata: true });
-		console.debug("Rebuilding XML...");
+		console.debug("Building Native vRO Action XML file...");
 		const _xml = builder.buildObject(action);
 		fs.writeFileSync(fileName, _xml);
 		vscode.window.showInformationMessage("Action Created Successfully.");
@@ -272,6 +491,10 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 
 	private validateLength(input: string): string {
 		return input.length > 1 ? "" : "Please enter a valid value";
+	}
+
+	private validateDotNotation(input: string): string {
+		return (input.indexOf(".") >= 0 && !input.endsWith(".")) ? "" : "Invalid value";
 	}
 
 	exportScript(key?: RenderKey): void {
