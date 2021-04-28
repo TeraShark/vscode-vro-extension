@@ -29,9 +29,10 @@
 ## Create new vRO Actions
 
 - Right-Click a folder in the Explorer pane in VSCode\
-![](/screenshots/new-action-view.png?raw=true "New Action Menu")
-- If your path contains "Actions" (which is the default base location for a vRO repo for actions), VSCode will prompt for the following:
+![](/screenshots/new-action-view.png?raw=true "New Native Action Menu")
+- If your path is "Actions" or a descendent thereof (which is the default base location for a vRO repo for actions), VSCode will prompt for the following:
   - Action Name
+  - Action Namespace
   - Number of expected inputs
   -  For each input:
     - Input name
@@ -43,6 +44,25 @@
     - python (Python), or
     - node (NodeJS)
 - Once completed, the extension will create a new vRO XML file and will generate and open a new code window matching the language you specified. When you're done writing your code, you will have the ability to reinject your code back into the Action XML. Easy as pie.
+
+## Create vRO Action Bundles (New!)
+
+- Right-Click either the "ActionBundles" folder or a descendent thereof in the Explorer pane in VSCode\
+![](/screenshots/new-action-bundle-view.png?raw=true "New Action Bundle Menu")
+- If your path contains "ActionsBundles" (which is the default base location for a vRO repo for actions), VSCode will prompt for the following:
+  - Action Name
+  - Action Namespace
+  - Number of expected inputs
+  -  For each input:
+    - Input name
+    - Input Type
+  - Return type for your Action
+  - Entry point
+  - Language / Runtime for your action bundle (note that regular ES5 JS is not supported in Action Bundles)
+    - ps (Powershell), or
+    - python (Python), or
+    - node (NodeJS)
+- Once completed, the extension will create the necessary Action Bundle files, and will generate and open a new code window matching the language you specified. When you're done writing your code, simply save your bundle script files and check in your code. Easy as pie.
 
 ## Instruct vRO to perform a "pull"
 
