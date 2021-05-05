@@ -2,7 +2,7 @@
 	"name": "vro-xml-explorer",
 	"displayName": "vRO XML Explorer",
 	"description": "VSCode extension for vRealize Orchestrator Workflows and Actions",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"publisher": "ChrisAlleaume",
 	"icon": "media/code.png",
 	"homepage": "https://github.com/TeraShark/vscode-vro-extension/blob/main/README.md",
@@ -97,12 +97,12 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "explorerResourceIsFolder && resourcePath =~ /\/Actions/",
+					"when": "explorerResourceIsFolder && resourcePath =~ //Actions/",
 					"command": "vro.createAction",
 					"group": "navigation"
 				},
 				{
-					"when": "explorerResourceIsFolder && resourcePath =~ /\/ActionBundles/",
+					"when": "explorerResourceIsFolder && resourcePath =~ //ActionBundles/",
 					"command": "vro.createActionBundle",
 					"group": "navigation"
 				},
@@ -212,14 +212,24 @@
 		"@typescript-eslint/parser": "^4.16.0",
 		"eslint": "^7.21.0",
 		"js-yaml": "^3.14.1",
-		"node-rest-client": "^3.1.0",
+		"node-rest-client": "^1.4.4",
 		"superagent": "^6.1.0",
 		"typescript": "^4.2.2"
 	},
 	"dependencies": {
+		"@types/mkdirp": "^0.5.2",
+		"@types/node": "^12.20.6",
+		"@types/rimraf": "^2.0.2",
+		"@types/vscode": "^1.45.0",
+		"@typescript-eslint/eslint-plugin": "^4.16.0",
+		"@typescript-eslint/parser": "^4.16.0",
+		"eslint": "^7.21.0",
+		"js-yaml": "^3.14.1",
 		"minimist": "^0.2.1",
 		"mkdirp": "^0.5.1",
 		"rimraf": "^2.6.2",
+		"superagent": "^6.1.0",
+		"typescript": "^4.2.2",
 		"uuid": "^8.3.2",
 		"xml2js": "^0.4.23"
 	}
