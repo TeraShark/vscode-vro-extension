@@ -343,7 +343,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		const entryFunction = entrypoint.split(".")[1];
 		action["dunes-script-module"]["entry-point"] = entrypoint;
 		if(inputs.size > 0){
-			let _inputs = [];
+			const _inputs = [];
 			inputs.forEach((value: string, key: string) => {
 				_inputs.push({
 					"_": "",
@@ -372,7 +372,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 				break;
 			case vROruntimes.python:
 				action["dunes-script-module"]["runtime"] = [vROruntimes.python];
-				_script = `import json\r\n\r\ndef ${entryFunction}(context, inputs):\r\n    jsonOut=json.dumps(inputs, separators=(',', ':'))\r\n    print(\"Inputs were {0}\".format(jsonOut))\r\n\r\n    outputs = {\r\n      \"status\": \"done\"\r\n    }\r\n\r\n    return outputs`;
+				_script = `import json\r\n\r\ndef ${entryFunction}(context, inputs):\r\n    jsonOut=json.dumps(inputs, separators=(',', ':'))\r\n    print("Inputs were {0}".format(jsonOut))\r\n\r\n    outputs = {\r\n      "status": "done"\r\n    }\r\n\r\n    return outputs`;
 				ext = "py";
 				comment = "# ";
 				break;
@@ -389,7 +389,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 
 		//Base bundle file:
 		const entryFile = `${entrypoint.split(".")[0]}.${ext}`;
-		console.debug(`Writing entry file: ${entryFile}`)
+		console.debug(`Writing entry file: ${entryFile}`);
 
 		fs.writeFileSync(bundleFilePath + "/" + entryFile, _script);
 		
@@ -434,7 +434,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		};
 
 		if(inputs.size > 0){
-			let _inputs = [];
+			const _inputs = [];
 			inputs.forEach((value: string, key: string) => {
 				_inputs.push({
 					"_": "",
