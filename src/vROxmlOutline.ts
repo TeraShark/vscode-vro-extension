@@ -105,6 +105,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 		opt.prompt = "What is the namespace for your Action? eg 'com.vmware.pso'";
 		let index = offset.path.indexOf("/Actions");
 
+
 		opt.value = "";
 		if(index >= 0){
 			if (offset.path.endsWith("Actions"))
@@ -510,7 +511,7 @@ export class vROXmlOutlineProvider implements vscode.TreeDataProvider<RenderKey>
 			this.injectScript(this.getElementByName(key.elementName));
 		}
 	}
-
+ 
 	reinjectAll(key?: RenderKey): void {
 		//reinject all scripts
 		this.injectAllScripts();

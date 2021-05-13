@@ -18,8 +18,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onView:vROxmlOutline",
-		"onLanguage:xml"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -49,7 +48,7 @@
 				"command": "vROxmlOutline.export",
 				"title": "Export All Scripts",
 				"icon": {
-					"light": "resources/light/signout.svg",
+					"light": "${pa resources${light/signout.svg",
 					"dark": "resources/dark/signout.svg"
 				}
 			},
@@ -97,12 +96,12 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "explorerResourceIsFolder && resourcePath =~ //Actions/",
+					"when": "explorerResourceIsFolder && resourcePath =~ /\/Actions\/|\\Actions\\",
 					"command": "vro.createAction",
 					"group": "navigation"
 				},
 				{
-					"when": "explorerResourceIsFolder && resourcePath =~ //ActionBundles/",
+					"when": "explorerResourceIsFolder && resourcePath =~ \/ActionBundles\/|\\ActionBundles\\",
 					"command": "vro.createActionBundle",
 					"group": "navigation"
 				},
