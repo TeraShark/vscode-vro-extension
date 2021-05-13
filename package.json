@@ -2,7 +2,7 @@
 	"name": "vro-xml-explorer",
 	"displayName": "vRO XML Explorer",
 	"description": "VSCode extension for vRealize Orchestrator Workflows and Actions",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"publisher": "ChrisAlleaume",
 	"icon": "media/code.png",
 	"homepage": "https://github.com/TeraShark/vscode-vro-extension/blob/main/README.md",
@@ -228,7 +228,6 @@
 		"mkdirp": "^0.5.1",
 		"rimraf": "^2.6.2",
 		"superagent": "^6.1.0",
-		"tsc": "^2.0.3",
 		"typescript": "^4.2.2",
 		"uuid": "^8.3.2",
 		"xml2js": "^0.4.23"
